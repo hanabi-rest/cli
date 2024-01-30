@@ -2,8 +2,10 @@ import fetch from "node-fetch";
 
 const API_ROOT = "http://localhost:8989";
 
-export async function getFiles(application_id: string) {
-  const res = await fetch(`${API_ROOT}/applications/${application_id}/versions`);
+export async function getFiles(version_id: string) {
+  const res = await fetch(
+    `${API_ROOT}/applications/versions/${version_id}/files`
+  );
 
   if (res.status === 404) {
     console.error("Application not found. Please make sure it is published.");
@@ -14,12 +16,11 @@ export async function getFiles(application_id: string) {
   }
 
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  const data: any = await res.json();
+  const filesData: any = await res.json();
 
-  const files = await fetch(`${API_ROOT}/applications/${application_id}/versions/${data[0].id}/files`);
-
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  const filesData: any = await files.json();
-
-  return { md: filesData["route.md"], sql: filesData["schema.sql"], source: filesData["index.ts"] };
+  return {
+    md: filesData["route.md"],
+    sql: filesData["schema.sql"],
+    source: filesData["index.ts"],
+  };
 }

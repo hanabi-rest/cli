@@ -37,18 +37,27 @@ async function main() {
 
   const program = new Command()
     .name(packageInfo.name || "cli")
-    .version(packageInfo.version || "1.0.0", "-v, --version", "display the version number")
-    .arguments("<application-id>")
-    .usage(`${chalk.green("<application-id>")} [options]`)
+    .version(
+      packageInfo.version || "1.0.0",
+      "-v, --version",
+      "display the version number"
+    )
+    .arguments("<version-id>")
+    .usage(`${chalk.green("<version-id>")} [options]`)
     .option("--dir <project-directory>", "directory name")
-    .option("--skip-code-package", "Skip installation of npm packages imported in the code")
+    .option(
+      "--skip-code-package",
+      "Skip installation of npm packages imported in the code"
+    )
     .option("--main-only", "Dumps API code only.")
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
     .action(async (name, options) => {
       const online = await getOnline();
 
       if (!online) {
-        console.error("You appear to be offline. Please check your internet connection and try again.");
+        console.error(
+          "You appear to be offline. Please check your internet connection and try again."
+        );
         process.exit(1);
       }
 
@@ -58,17 +67,29 @@ async function main() {
         const fileExists = fs.existsSync(path.join(process.cwd(), "index.ts"));
 
         if (fileExists) {
-          console.info("The index.ts file already exists. Please retry with a different name.");
+          console.info(
+            "The index.ts file already exists. Please retry with a different name."
+          );
           process.exit(1);
         }
 
         fs.writeFileSync(path.join(process.cwd(), "index.ts"), source);
-        console.info(`${chalk.green("Success!")} Created index.ts file in ${chalk.green(process.cwd())}`);
+        console.info(
+          `${chalk.green("Success!")} Created index.ts file in ${chalk.green(
+            process.cwd()
+          )}`
+        );
 
         return;
       }
 
-      const packageManager = options.useNpm ? "npm" : options.usePnpm ? "pnpm" : options.useYarn ? "yarn" : getPkgManager();
+      const packageManager = options.useNpm
+        ? "npm"
+        : options.usePnpm
+        ? "pnpm"
+        : options.useYarn
+        ? "yarn"
+        : getPkgManager();
 
       projectPath = options.dir;
 
@@ -80,7 +101,9 @@ async function main() {
           message: "What is your project named?",
           initial: "my-app",
           validate: (name) => {
-            const validation = validateNpmName(path.basename(path.resolve(name)));
+            const validation = validateNpmName(
+              path.basename(path.resolve(name))
+            );
             if (validation.valid) {
               return true;
             }
@@ -98,7 +121,11 @@ async function main() {
       const validation = validateNpmName(projectName);
 
       if (!validation.valid) {
-        console.error(`Could not create a project called ${chalk.red(`"${projectName}"`)} because of npm naming restrictions:`);
+        console.error(
+          `Could not create a project called ${chalk.red(
+            `"${projectName}"`
+          )} because of npm naming restrictions:`
+        );
 
         for (const p of validation.problems) {
           console.error(`${chalk.red(chalk.bold("*"))} ${p}`);
@@ -110,7 +137,9 @@ async function main() {
       const folderExists = fs.existsSync(root);
 
       if (folderExists) {
-        console.info("The directory already exists. Please try again with a different name.");
+        console.info(
+          "The directory already exists. Please try again with a different name."
+        );
         process.exit(1);
       }
 
