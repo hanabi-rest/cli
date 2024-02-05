@@ -21,7 +21,7 @@
     "build": "tsup",
     "typecheck": "tsc --noEmit",
     "start": "node dist/index.js",
-    "test": "vitest",
+    "test": "vitest run",
     "test:watch": "vitest -w",
     "coverage": "vitest --coverage"
   },
