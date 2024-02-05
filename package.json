@@ -21,7 +21,9 @@
     "build": "tsup",
     "typecheck": "tsc --noEmit",
     "start": "node dist/index.js",
-    "test": "jest"
+    "test": "vitest",
+    "test:watch": "vitest -w",
+    "coverage": "vitest --coverage"
   },
   "dependencies": {
     "@babel/parser": "^7.23.6",
@@ -41,15 +43,13 @@
     "@changesets/cli": "^2.27.1",
     "@types/cross-spawn": "^6.0.6",
     "@types/fs-extra": "^11.0.4",
-    "@types/jest": "^29.5.11",
     "@types/node": "^20",
     "@types/prompts": "^2.4.9",
     "@types/validate-npm-package-name": "^4.0.2",
     "dotenv": "^16.4.1",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.2",
     "tsup": "^8.0.1",
     "type-fest": "^4.10.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
   }
 }
