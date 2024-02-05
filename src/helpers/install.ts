@@ -4,16 +4,31 @@ import spawn from "cross-spawn";
 import packageJson from "package-json";
 
 export async function install(packageManager: PackageManager, dependencies: string[]): Promise<void> {
-  const args: string[] = [packageManager === "yarn" && dependencies.length > 0 ? "add" : "install"];
+  
+  const validDependencies: string[] = []
 
   // Check if dependencies exist in the npm registry
   for (const dep of dependencies) {
     try {
       await packageJson(dep);
-      args.push(dep);
+      validDependencies.push(dep)
     } catch (error) {
       console.info(`Dependency ${chalk.red(dep)} does not exist in the npm registry. Skip...`);
     }
+  }
+
+  const args: string[] = [];
+
+  if (packageManager === "yarn") {
+    if (validDependencies.length > 0) {
+      // Use 'add' command if there are valid dependencies
+      args.push("add", ...validDependencies);
+    } else {
+      args.push("install");
+    }
+  } else {
+    // npm or pnpm or bun
+    args.push("install", ...validDependencies);
   }
 
   return new Promise((resolve, reject) => {
