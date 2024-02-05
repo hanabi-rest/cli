@@ -6,6 +6,7 @@ import { install } from "@/src/helpers/install";
 import chalk from "chalk";
 import fs from "fs-extra";
 import { type PackageJson } from "type-fest";
+import { extractImportsFromSource } from "@/src/helpers/ast";
 
 export const installTemplate = async ({
   root,
@@ -13,19 +14,29 @@ export const installTemplate = async ({
   packageManager,
   skipCodePackage,
   appId,
-}: { root: string; appName: string; packageManager: PackageManager; skipCodePackage: boolean; appId: string }) => {
+}: {
+  root: string;
+  appName: string;
+  packageManager: PackageManager;
+  skipCodePackage: boolean;
+  appId: string;
+}) => {
   console.info(`Using ${packageManager}`);
 
   const { md, sql, source } = await getFiles(appId);
 
   fs.mkdirSync(root, { recursive: true });
 
-  await fs.copy(path.join(process.cwd(), "templates", "workers"), root, (err) => {
-    if (err) {
-      console.error("Failed to copy files. Please check permissions.", err);
-      process.exit(1);
+  await fs.copy(
+    path.join(process.cwd(), "templates", "workers"),
+    root,
+    (err) => {
+      if (err) {
+        console.error("Failed to copy files. Please check permissions.", err);
+        process.exit(1);
+      }
     }
-  });
+  );
 
   process.chdir(root);
 
@@ -37,9 +48,7 @@ export const installTemplate = async ({
   fs.writeFileSync(path.join(root, "migrations", "schema.sql"), sql);
   fs.writeFileSync(path.join(root, "src", "index.ts"), source);
 
-  const codeDependencies: string[] = Array.from<RegExpMatchArray>(source.matchAll(/from ["'](.*)["']/g))
-    .map((m) => m[1])
-    .filter((i) => i !== "hono");
+  const dependencies = await extractImportsFromSource(source);
 
   const packageJson: PackageJson = {
     name: appName,
@@ -60,17 +69,24 @@ export const installTemplate = async ({
     },
   };
 
-  await fs.writeFile(path.join(root, "package.json"), JSON.stringify(packageJson, null, 2) + os.EOL);
+  await fs.writeFile(
+    path.join(root, "package.json"),
+    JSON.stringify(packageJson, null, 2) + os.EOL
+  );
 
   console.info("\nInstalling dependencies:");
-  for (const dependency in packageJson.dependencies) console.info(`- ${chalk.cyan(dependency)}`);
+  for (const dependency in packageJson.dependencies)
+    console.info(`- ${chalk.cyan(dependency)}`);
 
-  if (!skipCodePackage) for (const dependency of codeDependencies) console.info(`- ${chalk.cyan(dependency)}`);
+  if (!skipCodePackage)
+    for (const dependency of dependencies)
+      console.info(`- ${chalk.cyan(dependency)}`);
 
   console.info("\nInstalling devDependencies:");
-  for (const dependency in packageJson.devDependencies) console.info(`- ${chalk.cyan(dependency)}`);
+  for (const dependency in packageJson.devDependencies)
+    console.info(`- ${chalk.cyan(dependency)}`);
 
   console.info();
 
-  await install(packageManager, skipCodePackage ? [] : codeDependencies);
+  await install(packageManager, skipCodePackage ? [] : dependencies);
 };
