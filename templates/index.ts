@@ -7,6 +7,7 @@ import chalk from "chalk";
 import fs from "fs-extra";
 import { type PackageJson } from "type-fest";
 import { extractImportsFromSource } from "@/src/helpers/ast";
+import prompts from "prompts";
 
 export const installTemplate = async ({
   root,
@@ -87,6 +88,21 @@ export const installTemplate = async ({
     console.info(`- ${chalk.cyan(dependency)}`);
 
   console.info();
+  
+  if (!skipCodePackage) {
+    const res = await prompts({
+      type: "confirm",
+      name: "install",
+      message: "Are you sure you want to install the above dependencies?",
+      initial: true,
+    });
+
+    if (!res.install) {
+      console.info("Skip...");
+      return;
+    }
+    
+  }
 
   await install(packageManager, skipCodePackage ? [] : dependencies);
 };
