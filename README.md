@@ -10,7 +10,7 @@ $ npx @hanabi/cli <version-id>
 
 Please refer to the following document for instructions on how to use the CLI.
 
-http://localhost:3000/docs/cli
+https://hanabi.rest/docs/cli
 
 ## LICENCE
 
