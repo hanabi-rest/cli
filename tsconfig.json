@@ -17,6 +17,7 @@
     "strict": true,
     "isolatedModules": false,
     "baseUrl": ".",
+    "resolveJsonModule": true,
     "paths": {
       "@/*": ["./*"]
     }
