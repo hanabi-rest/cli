@@ -1,9 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": [
-    "@changesets/changelog-github",
-    { "repo": "inaridiy/api-gen-cli" }
-  ],
+  "changelog": ["@changesets/changelog-github", { "repo": "hanabi-rest/cli" }],
   "commit": false,
   "fixed": [],
   "linked": [],
