@@ -1,6 +1,6 @@
 {
   "name": "@hanabi.rest/cli",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "CLI to download code, SQL, and dependencies for hanabi.rest applications.",
   "publishConfig": {
     "access": "public"
@@ -11,19 +11,31 @@
   "bin": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/inaridiy/api-gen-cli.git"
+    "url": "https://github.com/hanabi-rest/cli"
   },
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "sqlite",
+    "v0",
+    "hono",
+    "edge-computing",
+    "cloudflare-workers"
   ],
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
     "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest -w",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage",
+    "release": "changeset version",
+    "pub:beta": "pnpm build && pnpm publish --no-git-checks --access public --tag beta",
+    "pub:next": "pnpm build && pnpm publish --no-git-checks --access public --tag next",
+    "pub:release": "pnpm build && pnpm publish --access public"
   },
   "dependencies": {
     "@babel/parser": "^7.23.6",
@@ -47,6 +59,7 @@
     "@types/prompts": "^2.4.9",
     "@types/validate-npm-package-name": "^4.0.2",
     "dotenv": "^16.4.1",
+    "rimraf": "^5.0.5",
     "tsup": "^8.0.1",
     "type-fest": "^4.10.1",
     "typescript": "^5.3.3",

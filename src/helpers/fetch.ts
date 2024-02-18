@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-const API_ROOT = process.env.API_ROOT || "http://localhost:8989";
+const API_ROOT = process.env.API_ROOT || "https://api.hanabi.rest";
 
 export async function getFiles(version_id: string) {
   const res = await fetch(
