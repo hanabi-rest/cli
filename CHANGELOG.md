@@ -1,5 +1,11 @@
 # @hanabi.rest/cli
 
+## 0.1.1
+
+### Patch Changes
+
+- [#5](https://github.com/hanabi-rest/cli/pull/5) [`edc5c71`](https://github.com/hanabi-rest/cli/commit/edc5c71c49b228d865b1d8cdd4fffb1ab3df50e4) Thanks [@yutakobayashidev](https://github.com/yutakobayashidev)! - fix package.json
+
 ## 0.1.0
 
 ### Minor Changes
