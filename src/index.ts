@@ -12,6 +12,7 @@ import { getOnline } from "./helpers/get-online";
 import { getPkgManager } from "./helpers/get-pkg-manager";
 import { validateNpmName } from "./helpers/validate-pkg";
 import { getPackageInfo } from "./utils/get-package-info";
+import packageJson from "../package.json";
 
 process.on("SIGINT", () => process.exit(0));
 process.on("SIGTERM", () => process.exit(0));
@@ -33,15 +34,9 @@ const onPromptState = (state: {
 let projectPath = "";
 
 async function main() {
-  const packageInfo = await getPackageInfo();
-
   const program = new Command()
-    .name(packageInfo.name || "cli")
-    .version(
-      packageInfo.version || "1.0.0",
-      "-v, --version",
-      "display the version number"
-    )
+    .name(packageJson.name)
+    .version(packageJson.version, "-v, --version", "display the version number")
     .arguments("<version-id>")
     .usage(`${chalk.green("<version-id>")} [options]`)
     .option("--dir <project-directory>", "directory name")
