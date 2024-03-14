@@ -14,7 +14,8 @@
     "url": "https://github.com/hanabi-rest/cli"
   },
   "files": [
-    "dist"
+    "dist",
+    "dist/templates/**/.gitignore"
   ],
   "keywords": [
     "sqlite",
@@ -25,7 +26,7 @@
   ],
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup && cp -r templates dist/",
+    "build": "tsup && cp -r templates dist/ && rm dist/templates/index.ts",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
     "start": "node dist/index.js",
