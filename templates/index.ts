@@ -8,6 +8,7 @@ import fs from "fs-extra";
 import { type PackageJson } from "type-fest";
 import { extractImportsFromSource } from "@/src/helpers/ast";
 import prompts from "prompts";
+import { fileURLToPath } from 'url';
 
 export const installTemplate = async ({
   root,
@@ -28,8 +29,8 @@ export const installTemplate = async ({
 
   fs.mkdirSync(root, { recursive: true });
 
-  await fs.copy(
-    path.join(process.cwd(), "templates", "workers"),
+  fs.copy(
+    path.join(path.dirname(fileURLToPath(import.meta.url)), "templates", "workers"),
     root,
     (err) => {
       if (err) {
@@ -60,7 +61,7 @@ export const installTemplate = async ({
       deploy: "wrangler deploy --minify src/index.ts",
       migrate: "wrangler d1 migrations apply my-database --local",
       "migrate:prod": "wrangler d1 migrations apply my-database",
-    },
+    }, 
     dependencies: {
       hono: "^3.12.7",
     },
