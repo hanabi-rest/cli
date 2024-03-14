@@ -1,5 +1,11 @@
 # @hanabi.rest/cli
 
+## 0.1.4
+
+### Patch Changes
+
+- [#11](https://github.com/hanabi-rest/cli/pull/11) [`ac79fda`](https://github.com/hanabi-rest/cli/commit/ac79fdab032d3febe07773ba9316a55f075ed0c7) Thanks [@yutakobayashidev](https://github.com/yutakobayashidev)! - Add dist/templates/\*\*/.gitignore to files in package.json
+
 ## 0.1.3
 
 ### Patch Changes
