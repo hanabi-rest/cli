@@ -1,5 +1,11 @@
 # @hanabi.rest/cli
 
+## 0.1.2
+
+### Patch Changes
+
+- [#7](https://github.com/hanabi-rest/cli/pull/7) [`4afb909`](https://github.com/hanabi-rest/cli/commit/4afb909067d58eb08ad02bb588008758e54158fc) Thanks [@yutakobayashidev](https://github.com/yutakobayashidev)! - fix: templates path
+
 ## 0.1.1
 
 ### Patch Changes
