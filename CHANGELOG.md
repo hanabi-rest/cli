@@ -1,5 +1,11 @@
 # @hanabi.rest/cli
 
+## 0.1.5
+
+### Patch Changes
+
+- [`437d513`](https://github.com/hanabi-rest/cli/commit/437d5135f1046130b81c314c968a97fff08d7ec4) Thanks [@yutakobayashidev](https://github.com/yutakobayashidev)! - Add .npmignore file
+
 ## 0.1.4
 
 ### Patch Changes
