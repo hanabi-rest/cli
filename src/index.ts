@@ -11,7 +11,6 @@ import { createApp } from "./create-app";
 import { getOnline } from "./helpers/get-online";
 import { getPkgManager } from "./helpers/get-pkg-manager";
 import { validateNpmName } from "./helpers/validate-pkg";
-import { getPackageInfo } from "./utils/get-package-info";
 import packageJson from "../package.json";
 
 process.on("SIGINT", () => process.exit(0));
