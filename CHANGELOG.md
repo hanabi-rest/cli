@@ -1,5 +1,11 @@
 # @hanabi.rest/cli
 
+## 0.1.6
+
+### Patch Changes
+
+- [#14](https://github.com/hanabi-rest/cli/pull/14) [`f8da679`](https://github.com/hanabi-rest/cli/commit/f8da67971074209415682c90915ccc79e8aaaa73) Thanks [@moons-14](https://github.com/moons-14)! - fix gitignore
+
 ## 0.1.5
 
 ### Patch Changes

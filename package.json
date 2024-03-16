@@ -1,6 +1,6 @@
 {
   "name": "@hanabi.rest/cli",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "CLI to download code, SQL, and dependencies for hanabi.rest applications.",
   "publishConfig": {
     "access": "public"
