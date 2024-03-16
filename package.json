@@ -15,7 +15,7 @@
   },
   "files": [
     "dist",
-    "dist/templates/**/.gitignore"
+    "dist/templates/**/gitignore"
   ],
   "keywords": [
     "sqlite",

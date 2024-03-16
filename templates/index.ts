@@ -29,15 +29,29 @@ export const installTemplate = async ({
 
   fs.mkdirSync(root, { recursive: true });
 
-  fs.copy(
-    path.join(path.dirname(fileURLToPath(import.meta.url)), "templates", "workers"),
-    root,
-    (err) => {
-      if (err) {
-        console.error("Failed to copy files. Please check permissions.", err);
-        process.exit(1);
-      }
+  const fileCopyError = (err: NodeJS.ErrnoException | null | undefined) => {
+    if (err) {
+      console.error("Failed to copy files. Please check permissions.", err);
+      process.exit(1);
     }
+  }
+
+  fs.copy(
+    path.join(path.dirname(fileURLToPath(import.meta.url)), "templates", "workers", "wrangler.toml"),
+    path.join(root, "wrangler.toml"),
+    fileCopyError
+  );
+
+  fs.copy(
+    path.join(path.dirname(fileURLToPath(import.meta.url)), "templates", "workers", "tsconfig.json"),
+    path.join(root, "tsconfig.json"),
+    fileCopyError
+  );
+
+  fs.copy(
+    path.join(path.dirname(fileURLToPath(import.meta.url)), "templates", "workers", "gitignore"),
+    path.join(root, ".gitignore"),
+    fileCopyError
   );
 
   process.chdir(root);
@@ -61,7 +75,7 @@ export const installTemplate = async ({
       deploy: "wrangler deploy --minify src/index.ts",
       migrate: "wrangler d1 migrations apply my-database --local",
       "migrate:prod": "wrangler d1 migrations apply my-database",
-    }, 
+    },
     dependencies: {
       hono: "^3.12.7",
     },
@@ -89,7 +103,7 @@ export const installTemplate = async ({
     console.info(`- ${chalk.cyan(dependency)}`);
 
   console.info();
-  
+
   if (!skipCodePackage) {
     const res = await prompts({
       type: "confirm",
@@ -102,7 +116,7 @@ export const installTemplate = async ({
       console.info("Skip...");
       return;
     }
-    
+
   }
 
   await install(packageManager, skipCodePackage ? [] : dependencies);
