@@ -1,5 +1,11 @@
 # @hanabi.rest/cli
 
+## 0.2.0
+
+### Minor Changes
+
+- [#16](https://github.com/hanabi-rest/cli/pull/16) [`60a6342`](https://github.com/hanabi-rest/cli/commit/60a63428c1859995c0fab3d53626239b0f099808) Thanks [@yutakobayashidev](https://github.com/yutakobayashidev)! - Add token access for private applications
+
 ## 0.1.6
 
 ### Patch Changes
