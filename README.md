@@ -8,8 +8,8 @@ $ npx @hanabi/cli <version-id>
 
 ## Options
 
-```
-Usage: @hanabi/cli <version-id> [options]
+```bash
+Usage: @hanabi.rest/cli <version-id> [options]
 
 Options:
   -v, --version              display the version number
@@ -17,6 +17,9 @@ Options:
   --skip-code-package        Skip installation of npm packages imported in the code
   --main-only                Dumps API code only.
   -h, --help                 display help for command
+
+Commands:
+  config                     Configure the CLI tool
 ```
 
 ## Documents

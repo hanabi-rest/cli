@@ -24,6 +24,7 @@ export const installTemplate = async ({
   appId: string;
 }) => {
   console.info(`Using ${packageManager}`);
+  console.info()
 
   const { md, sql, source } = await getFiles(appId);
 
@@ -61,7 +62,7 @@ export const installTemplate = async ({
       deploy: "wrangler deploy --minify src/index.ts",
       migrate: "wrangler d1 migrations apply my-database --local",
       "migrate:prod": "wrangler d1 migrations apply my-database",
-    }, 
+    },
     dependencies: {
       hono: "^3.12.7",
     },
@@ -76,7 +77,7 @@ export const installTemplate = async ({
     JSON.stringify(packageJson, null, 2) + os.EOL
   );
 
-  console.info("\nInstalling dependencies:");
+  console.info("Installing dependencies:");
   for (const dependency in packageJson.dependencies)
     console.info(`- ${chalk.cyan(dependency)}`);
 
@@ -89,7 +90,7 @@ export const installTemplate = async ({
     console.info(`- ${chalk.cyan(dependency)}`);
 
   console.info();
-  
+
   if (!skipCodePackage) {
     const res = await prompts({
       type: "confirm",
@@ -102,7 +103,7 @@ export const installTemplate = async ({
       console.info("Skip...");
       return;
     }
-    
+
   }
 
   await install(packageManager, skipCodePackage ? [] : dependencies);
