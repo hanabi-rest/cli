@@ -24,6 +24,7 @@ export const installTemplate = async ({
   appId: string;
 }) => {
   console.info(`Using ${packageManager}`);
+  console.info()
 
   const { md, sql, source } = await getFiles(appId);
 
@@ -90,7 +91,7 @@ export const installTemplate = async ({
     JSON.stringify(packageJson, null, 2) + os.EOL
   );
 
-  console.info("\nInstalling dependencies:");
+  console.info("Installing dependencies:");
   for (const dependency in packageJson.dependencies)
     console.info(`- ${chalk.cyan(dependency)}`);
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import path from "path";
+import path from "node:path";
 import { getFiles } from "@/src/helpers/fetch";
 import chalk from "chalk";
 import { Command } from "commander";
@@ -12,6 +12,7 @@ import { getOnline } from "./helpers/get-online";
 import { getPkgManager } from "./helpers/get-pkg-manager";
 import { validateNpmName } from "./helpers/validate-pkg";
 import packageJson from "../package.json";
+import { readConfig, writeAuthConfigFile } from "./helpers/config-path";
 
 process.on("SIGINT", () => process.exit(0));
 process.on("SIGTERM", () => process.exit(0));
@@ -55,6 +56,18 @@ async function main() {
         process.exit(1);
       }
 
+      const config = readConfig();
+
+      if (!config?.api_token) {
+        console.info(chalk.yellow(`Warning: To access a private application, set the token with ${chalk.bold("@hanabi.rest/cli config set")}`));
+        console.info();
+      }
+
+      if (!name) {
+        console.error("Please provide a version id.");
+        process.exit(1);
+      }
+
       if (options.mainOnly) {
         const { source } = await getFiles(name);
 
@@ -80,10 +93,10 @@ async function main() {
       const packageManager = options.useNpm
         ? "npm"
         : options.usePnpm
-        ? "pnpm"
-        : options.useYarn
-        ? "yarn"
-        : getPkgManager();
+          ? "pnpm"
+          : options.useYarn
+            ? "yarn"
+            : getPkgManager();
 
       projectPath = options.dir;
 
@@ -145,6 +158,40 @@ async function main() {
       });
     })
     .allowUnknownOption();
+
+  const configCommand = program.command('config')
+    .description('Configure the CLI tool');
+
+  // config setサブコマンドを追加
+  configCommand
+    .command('set')
+    .description('Set a configuration option')
+    .option('--api-key [key]', 'Set the access token for authentication')
+    .action(async (options) => {
+      let apiKey: string = options.apiKey;
+
+      if (!apiKey) {
+
+        console.info(chalk.blue("To get your access token, visit: https://hanabi.rest/settings/tokens"))
+        console.info()
+
+        const response = await prompts({
+          type: 'password',
+          name: 'key',
+          message: 'Enter your Access token:',
+        });
+        apiKey = response.key;
+      }
+
+      if (apiKey) {
+        writeAuthConfigFile({ api_token: apiKey });
+
+        console.info()
+        console.info(chalk.green('access token saved successfully.'));
+      } else {
+        console.error(chalk.red('access token is required.'));
+      }
+    });
 
   program.parse();
 }
