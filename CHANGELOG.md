@@ -1,5 +1,11 @@
 # @hanabi.rest/cli
 
+## 0.3.0
+
+### Minor Changes
+
+- [#19](https://github.com/hanabi-rest/cli/pull/19) [`d8c3f86`](https://github.com/hanabi-rest/cli/commit/d8c3f86dd2dc23f717cee62d537f208d2c3cca5f) Thanks [@yutakobayashidev](https://github.com/yutakobayashidev)! - rename project name,command
+
 ## 0.2.0
 
 ### Minor Changes
