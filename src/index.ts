@@ -34,11 +34,16 @@ const onPromptState = (state: {
 let projectPath = "";
 
 async function main() {
+
   const program = new Command()
     .name(packageJson.name)
     .version(packageJson.version, "-v, --version", "display the version number")
-    .arguments("<version-id>")
-    .usage(`${chalk.green("<version-id>")} [options]`)
+    .usage(`${chalk.green("create <id>")} [options]`);
+
+
+  program
+    .command("create <id>")
+    .description("Create a new project based on the specified version id")
     .option("--dir <project-directory>", "directory name")
     .option(
       "--skip-code-package",
@@ -46,7 +51,7 @@ async function main() {
     )
     .option("--main-only", "Dumps API code only.")
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
-    .action(async (name, options) => {
+    .action(async (versionId, options) => {
       const online = await getOnline();
 
       if (!online) {
@@ -63,13 +68,8 @@ async function main() {
         console.info();
       }
 
-      if (!name) {
-        console.error("Please provide a version id.");
-        process.exit(1);
-      }
-
       if (options.mainOnly) {
-        const { source } = await getFiles(name);
+        const { source } = await getFiles(versionId);
 
         const fileExists = fs.existsSync(path.join(process.cwd(), "index.ts"));
 
@@ -153,7 +153,7 @@ async function main() {
       await createApp({
         appPath: resolvedProjectPath,
         skipCodePackage: options.skipCodePackage,
-        appId: name,
+        appId: versionId,
         packageManager,
       });
     })
@@ -162,7 +162,6 @@ async function main() {
   const configCommand = program.command('config')
     .description('Configure the CLI tool');
 
-  // config setサブコマンドを追加
   configCommand
     .command('set')
     .description('Set a configuration option')
@@ -171,7 +170,6 @@ async function main() {
       let apiKey: string = options.apiKey;
 
       if (!apiKey) {
-
         console.info(chalk.blue("To get your access token, visit: https://hanabi.rest/settings/tokens"))
         console.info()
 
