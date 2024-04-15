@@ -8,18 +8,17 @@ $ npx @hanabi/cli <version-id>
 
 ## Options
 
-```bash
-Usage: @hanabi.rest/cli <version-id> [options]
+```
+Usage: @hanabi.rest/cli create <id> [options]
 
 Options:
-  -v, --version              display the version number
-  --dir <project-directory>  directory name
-  --skip-code-package        Skip installation of npm packages imported in the code
-  --main-only                Dumps API code only.
-  -h, --help                 display help for command
+  -v, --version          display the version number
+  -h, --help             display help for command
 
 Commands:
-  config                     Configure the CLI tool
+  create [options] <id>  Create a new project based on the specified version id
+  config                 Configure the CLI tool
+  help [command]         display help for command
 ```
 
 ## Documents
