@@ -1,5 +1,11 @@
 # @hanabi.rest/cli
 
+## 0.3.1
+
+### Patch Changes
+
+- [#21](https://github.com/hanabi-rest/cli/pull/21) [`19448e0`](https://github.com/hanabi-rest/cli/commit/19448e07152a55faa4607d602756800343917824) Thanks [@yutakobayashidev](https://github.com/yutakobayashidev)! - fix import
+
 ## 0.3.0
 
 ### Minor Changes
