@@ -28,5 +28,4 @@ export async function createApp({
   console.info(`${chalk.green("Success!")} Created ${appName} at ${appPath}`);
   console.info();
   console.info(`Edit ${chalk.red("wrangler.toml")} to connect with D1.`);
-  console.info();
 }

@@ -26,7 +26,7 @@ export const installTemplate = async ({
   console.info(`Using ${packageManager}`);
   console.info()
 
-  const { md, sql, source } = await getFiles(appId);
+  const { readme, route, migrations, seed, source } = await getFiles(appId);
 
   fs.mkdirSync(root, { recursive: true });
 
@@ -61,8 +61,10 @@ export const installTemplate = async ({
   fs.mkdirSync(path.join(root, "src"), { recursive: true });
 
   // Create the files
-  fs.writeFileSync(path.join(root, "README.md"), md);
-  fs.writeFileSync(path.join(root, "migrations", "schema.sql"), sql);
+  fs.writeFileSync(path.join(root, "README.md"), readme);
+  fs.writeFileSync(path.join(root, "migrations", "schema.sql"), migrations);
+  fs.writeFileSync(path.join(root, "seed.sql"), seed);
+  fs.writeFileSync(path.join(root, "route.md"), route);
   fs.writeFileSync(path.join(root, "src", "index.ts"), source);
 
   const dependencies = await extractImportsFromSource(source);
