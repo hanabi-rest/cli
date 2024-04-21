@@ -1,18 +1,23 @@
 import { Project } from "ts-morph";
 
-export async function extractImportsFromSource(
-  source: string
-): Promise<string[]> {
+export async function extractImportsFromSource(sourceCode: string): Promise<string[]> {
   const project = new Project({
-    useInMemoryFileSystem: true,
+    useInMemoryFileSystem: true
   });
 
-  const sourceFile = project.createSourceFile("tempFile.ts", source);
+  const sourceFile = project.createSourceFile("tempFile.ts", sourceCode);
 
-  const imports = sourceFile
-    .getImportDeclarations()
-    .map((imp) => imp.getModuleSpecifierValue())
-    .filter((specifier) => specifier !== "hono");
+  const imports = sourceFile.getImportDeclarations()
+    .map(importDeclaration => importDeclaration.getModuleSpecifier().getLiteralText())
+    .filter(specifier => specifier !== "hono");
 
-  return imports;
+  const normalizedModules = imports.map((name) => {
+    const parts = name.split('/');
+    if (parts[0].startsWith('@')) {
+      return parts.length > 2 ? `${parts[0]}/${parts[1]}` : name;
+    }
+    return parts[0];
+  });
+
+  return Array.from(new Set(normalizedModules));
 }

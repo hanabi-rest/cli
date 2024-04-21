@@ -39,8 +39,10 @@ export async function getFiles(version_id: string) {
   const filesData: any = await res.json();
 
   return {
-    md: filesData["route.md"],
-    sql: filesData["schema.sql"],
+    readme: filesData["guide.md"],
+    route: filesData["route.md"],
+    migrations: filesData["schema.sql"],
+    seed: filesData["dummy.sql"],
     source: filesData["index.ts"],
   };
 }
