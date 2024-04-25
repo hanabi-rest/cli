@@ -34,69 +34,56 @@ const onPromptState = (state: {
 let projectPath = "";
 
 async function main() {
-
   const program = new Command()
     .name(packageJson.name)
     .version(packageJson.version, "-v, --version", "display the version number")
     .usage(`${chalk.green("create <id>")} [options]`);
 
-
   program
     .command("create <id>")
     .description("Create a new project based on the specified version id")
     .option("--dir <project-directory>", "directory name")
-    .option(
-      "--skip-code-package",
-      "Skip installation of npm packages imported in the code"
-    )
+    .option("--skip-code-package", "Skip installation of npm packages imported in the code")
     .option("--main-only", "Dumps API code only.")
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
     .action(async (versionId, options) => {
       const online = await getOnline();
 
       if (!online) {
-        console.error(
-          "You appear to be offline. Please check your internet connection and try again."
-        );
+        console.error("You appear to be offline. Please check your internet connection and try again.");
         process.exit(1);
       }
 
       const config = readConfig();
 
       if (!config?.api_token) {
-        console.info(chalk.yellow(`Warning: To access a private application, set the token with ${chalk.bold("@hanabi.rest/cli config set")}`));
+        console.info(
+          chalk.yellow(`Warning: To access a private application, set the token with ${chalk.bold("@hanabi.rest/cli config set")}`),
+        );
         console.info();
       }
 
       if (options.mainOnly) {
         const { source } = await getFiles(versionId);
+        if (!source) {
+          console.error("Failed to fetch files. Your API may be in the process of being generated or may have failed to generate.");
+          process.exit(1);
+        }
 
         const fileExists = fs.existsSync(path.join(process.cwd(), "index.ts"));
 
         if (fileExists) {
-          console.info(
-            "The index.ts file already exists. Please retry with a different name."
-          );
+          console.info("The index.ts file already exists. Please retry with a different name.");
           process.exit(1);
         }
 
         fs.writeFileSync(path.join(process.cwd(), "index.ts"), source);
-        console.info(
-          `${chalk.green("Success!")} Created index.ts file in ${chalk.green(
-            process.cwd()
-          )}`
-        );
+        console.info(`${chalk.green("Success!")} Created index.ts file in ${chalk.green(process.cwd())}`);
 
         return;
       }
 
-      const packageManager = options.useNpm
-        ? "npm"
-        : options.usePnpm
-          ? "pnpm"
-          : options.useYarn
-            ? "yarn"
-            : getPkgManager();
+      const packageManager = options.useNpm ? "npm" : options.usePnpm ? "pnpm" : options.useYarn ? "yarn" : getPkgManager();
 
       projectPath = options.dir;
 
@@ -108,9 +95,7 @@ async function main() {
           message: "What is your project named?",
           initial: "my-app",
           validate: (name) => {
-            const validation = validateNpmName(
-              path.basename(path.resolve(name))
-            );
+            const validation = validateNpmName(path.basename(path.resolve(name)));
             if (validation.valid) {
               return true;
             }
@@ -128,11 +113,7 @@ async function main() {
       const validation = validateNpmName(projectName);
 
       if (!validation.valid) {
-        console.error(
-          `Could not create a project called ${chalk.red(
-            `"${projectName}"`
-          )} because of npm naming restrictions:`
-        );
+        console.error(`Could not create a project called ${chalk.red(`"${projectName}"`)} because of npm naming restrictions:`);
 
         for (const p of validation.problems) {
           console.error(`${chalk.red(chalk.bold("*"))} ${p}`);
@@ -144,9 +125,7 @@ async function main() {
       const folderExists = fs.existsSync(root);
 
       if (folderExists) {
-        console.info(
-          "The directory already exists. Please try again with a different name."
-        );
+        console.info("The directory already exists. Please try again with a different name.");
         process.exit(1);
       }
 
@@ -159,24 +138,23 @@ async function main() {
     })
     .allowUnknownOption();
 
-  const configCommand = program.command('config')
-    .description('Configure the CLI tool');
+  const configCommand = program.command("config").description("Configure the CLI tool");
 
   configCommand
-    .command('set')
-    .description('Set a configuration option')
-    .option('--api-key [key]', 'Set the access token for authentication')
+    .command("set")
+    .description("Set a configuration option")
+    .option("--api-key [key]", "Set the access token for authentication")
     .action(async (options) => {
       let apiKey: string = options.apiKey;
 
       if (!apiKey) {
-        console.info(chalk.blue("To get your access token, visit: https://hanabi.rest/settings/tokens"))
-        console.info()
+        console.info(chalk.blue("To get your access token, visit: https://hanabi.rest/settings/tokens"));
+        console.info();
 
         const response = await prompts({
-          type: 'password',
-          name: 'key',
-          message: 'Enter your Access token:',
+          type: "password",
+          name: "key",
+          message: "Enter your Access token:",
         });
         apiKey = response.key;
       }
@@ -184,10 +162,10 @@ async function main() {
       if (apiKey) {
         writeAuthConfigFile({ api_token: apiKey });
 
-        console.info()
-        console.info(chalk.green('access token saved successfully.'));
+        console.info();
+        console.info(chalk.green("access token saved successfully."));
       } else {
-        console.error(chalk.red('access token is required.'));
+        console.error(chalk.red("access token is required."));
       }
     });
 
