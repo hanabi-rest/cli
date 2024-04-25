@@ -36,7 +36,7 @@ export async function getFiles(version_id: string) {
   handleResponseStatus(res.status);
 
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  const filesData: any = await res.json();
+  const filesData = await res.json() as Record<string, string|undefined>;
 
   return {
     readme: filesData["guide.md"],

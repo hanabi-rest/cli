@@ -8,7 +8,7 @@ import fs from "fs-extra";
 import { type PackageJson } from "type-fest";
 import { extractImportsFromSource } from "@/src/helpers/ast";
 import prompts from "prompts";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 export const installTemplate = async ({
   root,
@@ -24,9 +24,15 @@ export const installTemplate = async ({
   appId: string;
 }) => {
   console.info(`Using ${packageManager}`);
-  console.info()
+  console.info();
 
   const { readme, route, migrations, seed, source } = await getFiles(appId);
+
+  if (!readme || !route || !migrations || !source) {
+    throw new Error(
+      "Failed to fetch files. Your API may be in the process of being generated or may have failed to generate."
+    );
+  }
 
   fs.mkdirSync(root, { recursive: true });
 
@@ -35,22 +41,37 @@ export const installTemplate = async ({
       console.error("Failed to copy files. Please check permissions.", err);
       process.exit(1);
     }
-  }
+  };
 
   fs.copy(
-    path.join(path.dirname(fileURLToPath(import.meta.url)), "templates", "workers", "wrangler.toml"),
+    path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "templates",
+      "workers",
+      "wrangler.toml"
+    ),
     path.join(root, "wrangler.toml"),
     fileCopyError
   );
 
   fs.copy(
-    path.join(path.dirname(fileURLToPath(import.meta.url)), "templates", "workers", "tsconfig.json"),
+    path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "templates",
+      "workers",
+      "tsconfig.json"
+    ),
     path.join(root, "tsconfig.json"),
     fileCopyError
   );
 
   fs.copy(
-    path.join(path.dirname(fileURLToPath(import.meta.url)), "templates", "workers", "gitignore"),
+    path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "templates",
+      "workers",
+      "gitignore"
+    ),
     path.join(root, ".gitignore"),
     fileCopyError
   );
@@ -63,7 +84,7 @@ export const installTemplate = async ({
   // Create the files
   fs.writeFileSync(path.join(root, "README.md"), readme);
   fs.writeFileSync(path.join(root, "migrations", "schema.sql"), migrations);
-  fs.writeFileSync(path.join(root, "seed.sql"), seed);
+  seed && fs.writeFileSync(path.join(root, "seed.sql"), seed);
   fs.writeFileSync(path.join(root, "route.md"), route);
   fs.writeFileSync(path.join(root, "src", "index.ts"), source);
 
@@ -119,7 +140,6 @@ export const installTemplate = async ({
       console.info("Skip...");
       return;
     }
-
   }
 
   await install(packageManager, skipCodePackage ? [] : dependencies);
