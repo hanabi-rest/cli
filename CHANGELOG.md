@@ -1,5 +1,11 @@
 # @hanabi.rest/cli
 
+## 0.3.2
+
+### Patch Changes
+
+- [#23](https://github.com/hanabi-rest/cli/pull/23) [`62eaf86`](https://github.com/hanabi-rest/cli/commit/62eaf86ae404c83cc45fbb41ba381f7bc104bfb2) Thanks [@inaridiy](https://github.com/inaridiy)! - add error handling
+
 ## 0.3.1
 
 ### Patch Changes
